@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/adaptive_scaffold.dart';
 
-
-
 void main() {
   runApp(const Login());
 }
@@ -16,6 +14,8 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
+final Color darkBlue = Color.fromARGB(255, 114, 106, 30);
+
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
@@ -24,15 +24,12 @@ class _LoginState extends State<Login> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "AIRWAY ACADEMIA",
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
       home: Center(
         child: AdaptiveScaffold(
-          compact: CompactView(
-              welcomeImage: Login.welcomeImage, formKey: _formKey),
-          full:
-              FullView(welcomeImage: Login.welcomeImage, formKey: _formKey),
+          compact:
+              CompactView(welcomeImage: Login.welcomeImage, formKey: _formKey),
+          full: FullView(welcomeImage: Login.welcomeImage, formKey: _formKey),
         ),
       ),
     );
@@ -64,7 +61,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(40.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                     // ignore: unnecessary_const
                     icon: const Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      child: Icon(Icons.email),
+                      // child: Icon(Icons.email),
                     )),
                 controller: emailController,
               ),
@@ -102,26 +99,12 @@ class _LoginFormState extends State<LoginForm> {
               TextFormField(
                 obscureText: _obscureText,
                 controller: passwordController,
-                decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'Password *',
-                    suffix: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          if (_obscureText) {
-                            _obscureText = false;
-                          } else {
-                            _obscureText = true;
-                          }
-                        });
-                      },
-                      icon: Icon(_obscureText == true
-                          ? Icons.remove_red_eye
-                          : Icons.password),
-                    ),
-                    icon: const Padding(
+                    icon: Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      child: Icon(Icons.lock),
+                      // child: Icon(Icons.lock),
                     )),
               )
             ]),
@@ -132,7 +115,6 @@ class _LoginFormState extends State<LoginForm> {
               String formEmail = emailController.text.toString();
 
               String formPassword = passwordController.text.toString();
-
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,

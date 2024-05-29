@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_tfg/views/datatable.dart';
+import 'package:frontend_tfg/views/settings.dart';
+import 'package:frontend_tfg/views/students.dart';
 
 import 'views/login.dart';
 
