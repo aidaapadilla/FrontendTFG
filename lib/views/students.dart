@@ -18,7 +18,7 @@ class StudentsView extends StatelessWidget {
           actions: const [NavigationBarView()],
         ),
         body: const StudentScrollView(),
-        drawer: DrawerView(),
+        drawer: const DrawerView(),
       ),
     );
   }
