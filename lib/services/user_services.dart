@@ -71,7 +71,7 @@ class UserServices extends ChangeNotifier {
       final Map<String, dynamic> map = json.decode(response.body);
       DetailsModel det = detailsmodelfromJson(map);
 
-      StorageTFG().addItemsToLocalStorage(det.token, det.id, user.password);
+      // StorageTFG().addItemsToLocalStorage(det.token, det.id, user.password);
 
       return 1;
     } else if (response.statusCode == 402) {

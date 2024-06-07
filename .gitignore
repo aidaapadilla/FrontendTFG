@@ -42,7 +42,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-DB_CONN_STRING=""
-DB_NAME=""
-GAMES_COLLECTION_NAME=""
