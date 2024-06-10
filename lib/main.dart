@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_tfg/views/datatable.dart';
 import 'package:frontend_tfg/views/settings.dart';
 import 'package:frontend_tfg/views/students.dart';
-
+import 'package:frontend_tfg/views/register.dart';
 import 'views/login.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DataTableExampleApp(),
+      home: Register(),
     );
   }
 }
