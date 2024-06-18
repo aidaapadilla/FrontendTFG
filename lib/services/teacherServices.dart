@@ -50,13 +50,6 @@ class TeacherServices extends ChangeNotifier {
     var response = await client.post(uri,
         headers: {'content-type': 'application/json'}, body: teacherJS);
     if (response.statusCode == 200) {
-      // DetailsModel parametres = new DetailsModel(id: "");
-
-      // final Map<String, dynamic> map = json.decode(response.body);
-      // DetailsModel det = detailsmodelfromJson(map);
-
-      // StorageAparcam().addItemsToLocalStorage(det.token, det.id, user.password);
-
       return 1;
     } else if (response.statusCode == 402) {
       return 2;
@@ -65,9 +58,21 @@ class TeacherServices extends ChangeNotifier {
     }
   }
 
-  Future<List<Teacher>?> getStudents() async {
+  Future<List<Teacher>?> getTeachers() async {
     var client = http.Client();
-    var uri = Uri.parse('http://localhost:5432/api/students/');
+    var uri = Uri.parse('http://127.0.0.1:5432/api/teachers/');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      var json = response.body;
+      return listteacherFromJson(json);
+    }
+    return null;
+  }
+
+  Future<List<Teacher>?> getStudents() async {
+    //No es aquesta list no??
+    var client = http.Client();
+    var uri = Uri.parse('127.0.0.1:5432/api/teachers/students');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       var json = response.body;

@@ -1,6 +1,10 @@
 import 'dart:html';
-
+import 'package:frontend_tfg/services/studentServices.dart';
+import 'package:frontend_tfg/services/teacherServices.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_tfg/models/student.dart';
+import 'package:frontend_tfg/models/teacher.dart';
+import 'package:frontend_tfg/views/login.dart';
 import '../widgets/adaptive_scaffold.dart';
 
 void main() {
@@ -54,12 +58,12 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final nameController = TextEditingController();
-
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+  final passwordController2 = TextEditingController();
+  final teacherEmailController = TextEditingController();
+
   bool _obscureText = true;
-  bool _activateBool = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +98,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     // ignore: unnecessary_const
                     icon: const Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      // child: Icon(Icons.email),
+                      child: Icon(Icons.verified_user),
                     )),
                 controller: nameController,
               ),
@@ -107,7 +111,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     // ignore: unnecessary_const
                     icon: const Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      // child: Icon(Icons.email),
+                      child: Icon(Icons.email),
                     )),
                 controller: emailController,
               ),
@@ -115,33 +119,130 @@ class _RegisterFormState extends State<RegisterForm> {
               TextFormField(
                 obscureText: _obscureText,
                 controller: passwordController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     labelText: 'Password *',
-                    icon: Padding(
+                    suffix: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (_obscureText) {
+                            _obscureText = false;
+                          } else {
+                            _obscureText = true;
+                          }
+                        });
+                      },
+                      icon: Icon(_obscureText == true
+                          ? Icons.remove_red_eye
+                          : Icons.password),
+                    ),
+                    icon: const Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      // child: Icon(Icons.lock),
+                      child: Icon(Icons.lock),
                     )),
               ),
               const SizedBox(height: 9),
               TextFormField(
                 obscureText: _obscureText,
-                controller: passwordController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Repeat your password *',
-                    icon: Padding(
+                controller: passwordController2,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Password *',
+                    suffix: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (_obscureText) {
+                            _obscureText = false;
+                          } else {
+                            _obscureText = true;
+                          }
+                        });
+                      },
+                      icon: Icon(_obscureText == true
+                          ? Icons.remove_red_eye
+                          : Icons.password),
+                    ),
+                    icon: const Padding(
                       padding: EdgeInsets.only(top: 15.0),
-                      // child: Icon(Icons.lock),
+                      child: Icon(Icons.lock),
                     )),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                    //dependencies: email_validator: '^2.1.16'
+                    border: OutlineInputBorder(),
+                    labelText: 'Teacher email *',
+                    // ignore: unnecessary_const
+                    icon: const Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                      child: Icon(Icons.email),
+                    )),
+                controller: teacherEmailController,
               )
             ]),
           ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () async {
+              String formName = nameController.text.toString();
               String formEmail = emailController.text.toString();
               String formPassword = passwordController.text.toString();
+              String formPassword2 = passwordController2.text.toString();
+              String formTeacherEmail = teacherEmailController.toString();
+              print(
+                  "Form Data: $formName, $formEmail, $formPassword, $formPassword2");
+
+              if (formName.isEmpty ||
+                  formEmail.isEmpty ||
+                  formPassword.isEmpty ||
+                  formPassword2.isEmpty ||
+                  formTeacherEmail.isEmpty) {
+                openDialog(context, "Please fill the blanks");
+              } else {
+                if (formPassword2 == formPassword) {
+                  List<Teacher>? teachers =
+                      await TeacherServices().getTeachers();
+                  if (teachers != null) {
+                    Teacher matchedTeacher;
+                    for (var teacher in teachers) {
+                      print("$teacher");
+                      if (teacher.email == formEmail) {
+                        matchedTeacher = teacher;
+                        break;
+                      }
+                    }
+                    matchedTeacher = Teacher(
+                        id: "6666c937bbfd1b9ebf8bc19f",
+                        name: "Padi",
+                        password: "1234",
+                        email: "profesoraida@upc.edu",
+                        myStudents: []);
+
+                    if (matchedTeacher != null) {
+                      // Lógica para cuando se encuentra un profesor con el email
+                      print('Teacher found: ${matchedTeacher.name}');
+                      var student = Student(
+                          id: "",
+                          name: formName,
+                          password: formPassword,
+                          email: formEmail,
+                          teacher_id: matchedTeacher.id);
+                      await StudentServices().registerStudent(student);
+                      openDialog(context, 'User registered, Welcome!');
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Login()));
+                    } else {
+                      // Lógica para cuando no se encuentra ningún profesor con el email
+                      openDialog(context, "No teacher found with that email");
+                    }
+                  }
+                } else {
+                  openDialog(context, "Passwords do not match");
+                }
+              }
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,
@@ -172,20 +273,25 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  Future openDialog(String text) => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(text),
+  void openDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(message),
           actions: [
             TextButton(
-              child: const Text('Ok'),
+              child: Text("OK"),
               onPressed: () {
-                //idea
+                Navigator.of(context).pop();
               },
             ),
           ],
-        ),
-      );
+        );
+      },
+    );
+  }
 }
 
 class HeroImage extends StatelessWidget {

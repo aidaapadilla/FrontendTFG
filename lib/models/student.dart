@@ -3,6 +3,8 @@
 //     password: { type: String, required: true },
 //     email: { type: String, unique: true, required: true }
 // });
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 List<Student> liststudentFromJson(String str) =>
@@ -21,11 +23,13 @@ class Student {
       {required this.id,
       required this.name,
       required this.password,
-      required this.email});
+      required this.email,
+      required this.teacher_id});
   String id;
   String name;
   String password;
   String email;
+  String teacher_id;
 
   void setname(String name) {
     this.name = name;
@@ -39,10 +43,15 @@ class Student {
     this.email = email;
   }
 
+  void setTeacherID(teacher_id) {
+    this.teacher_id = teacher_id;
+  }
+
   factory Student.fromJson(Map<String, dynamic> json) => Student(
         id: json["_id"],
         name: json["name"],
-        password: "",
+        password: json["password"],
+        teacher_id: json["teacher_id"],
         email: json["email"],
       );
   Map<String, dynamic> toJson() => {
@@ -50,9 +59,9 @@ class Student {
         "name": name,
         "password": password,
         "email": email,
+        "teacher_id": teacher_id,
       };
 
-  // ignore: non_constant_identifier_names
   Map<String, dynamic> LogintoJson() => {
         "password": password,
         "email": email,

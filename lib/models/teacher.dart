@@ -23,12 +23,12 @@ class Teacher {
       required this.name,
       required this.password,
       required this.email,
-      required this.myStudents});
+      required List<String> myStudents});
   String id;
   String name;
   String password;
   String email;
-  List<dynamic>? myStudents;
+  List<String>? myStudents;
 
   void setname(String name) {
     this.name = name;
@@ -45,9 +45,9 @@ class Teacher {
   factory Teacher.fromJson(Map<String, dynamic> json) => Teacher(
         id: json["_id"],
         name: json["name"],
-        password: "",
+        password: json['password'],
         email: json["email"],
-        myStudents: json["myStudents"],
+        myStudents: [],
       );
   Map<String, dynamic> toJson() => {
         "_id": id,

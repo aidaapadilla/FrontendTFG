@@ -35,14 +35,30 @@ class DetailsModel {
 
 class StudentServices extends ChangeNotifier {
   // ignore: prefer_final_fields
-  Student _studentData = Student(id: "", name: "", password: "", email: "");
+  Student _studentData =
+      Student(id: "", name: "", password: "", email: "", teacher_id: "");
   Student get studentData => _studentData;
 
   void setStudentData(Student studentData) {
     _studentData = studentData;
   }
 
-  Future<int> loginUser(Student student) async {
+  Future<int> registerStudent(Student student) async {
+    var client = http.Client();
+    var uri = Uri.parse('localhost:5432/api/students/register');
+    var studentJS = json.encode(student.toJson());
+    var response = await client.post(uri,
+        headers: {'content-type': 'application/json'}, body: studentJS);
+    if (response.statusCode == 200) {
+      return 1;
+    } else if (response.statusCode == 402) {
+      return 2;
+    } else {
+      return 3;
+    }
+  }
+
+  Future<int> loginStudent(Student student) async {
     var client = http.Client();
     var uri = Uri.parse('http://localhost:5432/api/auth/login');
     var studentJS = json.encode(student.LogintoJson());
