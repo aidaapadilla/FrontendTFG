@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend_tfg/views/navigation_bar_view.dart';
+import 'package:frontend_tfg/widgets/navigation_bar_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Flutter code sample for [DataTable].

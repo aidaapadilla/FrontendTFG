@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend_tfg/views/datatable.dart';
-import 'package:frontend_tfg/views/navigation_bar_view.dart';
+import 'package:frontend_tfg/widgets/navigation_bar_view.dart';
 
 class StudentsView extends StatelessWidget {
   const StudentsView({super.key});
